@@ -11,6 +11,11 @@ import java.util.List;
 public class WordRemovalImpl implements WordRemoval {
 
     List<String> words;
+    List<String> finalText = new ArrayList<>();
+
+    public WordRemovalImpl() {
+
+    }
 
     public WordRemovalImpl(List<String> words) {
         this.words = words;
@@ -30,10 +35,11 @@ public class WordRemovalImpl implements WordRemoval {
         return localText;
     }
 
-    public static String removeWords(String string, String removeWord) {
+    public String removeWords(String string, String removeWord) {
 
         String finalWord = string.toLowerCase();
         finalWord = finalWord.replaceAll(removeWord, "");
+        this.finalText.add(finalWord);
         System.out.println("REMOVING: " + removeWord + " FROM: " + string);
         return finalWord;
 
@@ -50,9 +56,10 @@ public class WordRemovalImpl implements WordRemoval {
         }
 
         // System.out.println(removeWords(sentence, "the"));
+        WordRemovalImpl wordRemoval = new WordRemovalImpl();
 
         for(String string : wordList) {
-            String newSentence = removeWords(sentence, string);
+            String newSentence = wordRemoval.removeWords(sentence, string);
             System.out.println("New sentence: " + newSentence);
         }
     }
