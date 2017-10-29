@@ -1,5 +1,7 @@
 package main.java.Impl;
 
+import main.java.Utils.Constants;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -54,8 +56,8 @@ public class PorterStemmerImpl {
 
     static class Stemmer   {
         private char[] b;
-        private int i,     /* offset into b */
-                i_end, /* offset to end of stemmed word */
+        private int i,      /* offset into b */
+                i_end,      /* offset to end of stemmed word */
                 j, k;
         private static final int INC = 50;
         /* unit of size whereby b is increased */
@@ -83,14 +85,15 @@ public class PorterStemmerImpl {
          * of a char[] array. This is like repeated calls of add(char ch), but
          * faster.
          */
-
-        public void add(char[] w, int wLen)
-        {  if (i+wLen >= b.length)
-        {  char[] new_b = new char[i+wLen+INC];
-            for (int c = 0; c < i; c++) new_b[c] = b[c];
-            b = new_b;
-        }
-            for (int c = 0; c < wLen; c++) b[i++] = w[c];
+        public void add(char[] w, int wLen) {
+            if (i+wLen >= b.length) {
+                char[] new_b = new char[i+wLen+INC];
+                for (int c = 0; c < i; c++)
+                    new_b[c] = b[c];
+                b = new_b;
+            }
+            for (int c = 0; c < wLen; c++)
+                b[i++] = w[c];
         }
 
         /**
@@ -112,8 +115,7 @@ public class PorterStemmerImpl {
          */
         public char[] getResultBuffer() { return b; }
 
-   /* cons(i) is true <=> b[i] is a consonant. */
-
+        /* cons(i) is true <=> b[i] is a consonant. */
         private final boolean cons(int i)
         {  switch (b[i])
         {  case 'a': case 'e': case 'i': case 'o': case 'u': return false;
@@ -122,17 +124,16 @@ public class PorterStemmerImpl {
         }
         }
 
-   /* m() measures the number of consonant sequences between 0 and j. if c is
-      a consonant sequence and v a vowel sequence, and <..> indicates arbitrary
-      presence,
+        /* m() measures the number of consonant sequences between 0 and j. if c is
+        a consonant sequence and v a vowel sequence, and <..> indicates arbitrary
+        presence,
 
-         <c><v>       gives 0
-         <c>vc<v>     gives 1
-         <c>vcvc<v>   gives 2
-         <c>vcvcvc<v> gives 3
-         ....
-   */
-
+             <c><v>       gives 0
+            <c>vc<v>     gives 1
+            <c>vcvc<v>   gives 2
+            <c>vcvcvc<v> gives 3
+            ....
+        */
         private final int m()
         {  int n = 0;
             int i = 0;
@@ -158,30 +159,27 @@ public class PorterStemmerImpl {
             }
         }
 
-   /* vowelinstem() is true <=> 0,...j contains a vowel */
-
+        /* vowelinstem() is true <=> 0,...j contains a vowel */
         private final boolean vowelinstem()
         {  int i; for (i = 0; i <= j; i++) if (! cons(i)) return true;
             return false;
         }
 
-   /* doublec(j) is true <=> j,(j-1) contain a double consonant. */
-
+        /* doublec(j) is true <=> j,(j-1) contain a double consonant. */
         private final boolean doublec(int j)
         {  if (j < 1) return false;
             if (b[j] != b[j-1]) return false;
             return cons(j);
         }
 
-   /* cvc(i) is true <=> i-2,i-1,i has the form consonant - vowel - consonant
-      and also if the second c is not w,x or y. this is used when trying to
-      restore an e at the end of a short word. e.g.
+        /* cvc(i) is true <=> i-2,i-1,i has the form consonant - vowel - consonant
+        and also if the second c is not w,x or y. this is used when trying to
+        restore an e at the end of a short word. e.g.
 
-         cav(e), lov(e), hop(e), crim(e), but
-         snow, box, tray.
+        cav(e), lov(e), hop(e), crim(e), but
+        snow, box, tray.
 
-   */
-
+        */
         private final boolean cvc(int i) {
             if (i < 2 || !cons(i) || cons(i-1) || !cons(i-2)) return false;
             {  int ch = b[i];
@@ -198,9 +196,8 @@ public class PorterStemmerImpl {
             return true;
         }
 
-   /* setto(s) sets (j+1),...k to the characters in the string s, readjusting
-      k. */
-
+        /* setto(s) sets (j+1),...k to the characters in the string s, readjusting
+        k. */
         private final void setto(String s) {
             int l = s.length();
             int o = j+1;
@@ -208,11 +205,10 @@ public class PorterStemmerImpl {
             k = j+l;
         }
 
-   /* r(s) is used further down. */
-
+        /* r(s) is used further down. */
         private final void r(String s) { if (m() > 0) setto(s); }
 
-   /* step1() gets rid of plurals and -ed or -ing. e.g.
+        /* step1() gets rid of plurals and -ed or -ing. e.g.
 
           caresses  ->  caress
           ponies    ->  poni
@@ -232,8 +228,7 @@ public class PorterStemmerImpl {
 
           meetings  ->  meet
 
-   */
-
+        */
         private final void step1() {
             if (b[k] == 's') {
                 if (ends("sses")) k -= 2;
@@ -258,7 +253,8 @@ public class PorterStemmerImpl {
         }
 
         /* step2() turns terminal y to i when there is another vowel in the stem. */
-        private final void step2() { if (ends("y") && vowelinstem()) b[k] = 'i'; }
+        private final void step2() {
+            if (ends("y") && vowelinstem()) b[k] = 'i'; }
 
         /* step3() maps double suffices to single ones. so -ization ( = -ize plus
         -ation) maps to -ize etc. note that the string before the suffix must give
@@ -371,54 +367,55 @@ public class PorterStemmerImpl {
         public static void main(String[] args) {
             char[] w = new char[501];
             Stemmer s = new Stemmer();
-            for (int i = 0; i < args.length; i++)
+            // for (int i = 0; i < args.length; i++)
                 try {
-                    FileInputStream in = new FileInputStream(args[i]);
+                    // FileInputStream in = new FileInputStream(args[i]);
+                    FileInputStream in = new FileInputStream(Constants.ALICE_FILE);
 
                     try {
                         while(true) {
                             int ch = in.read();
                             if (Character.isLetter((char) ch)) {
-                            int j = 0;
-                            while(true) {
-                                ch = Character.toLowerCase((char) ch);
-                                w[j] = (char) ch;
-                                if (j < 500) j++;
-                                ch = in.read();
-                                if (!Character.isLetter((char) ch)) {
+                                int j = 0;
+                                while(true) {
+                                    ch = Character.toLowerCase((char) ch);
+                                    w[j] = (char) ch;
+                                    if (j < 500) j++;
+                                    ch = in.read();
+                                    if (!Character.isLetter((char) ch)) {
 
-                                    /* to test add(char ch) */
-                                    for (int c = 0; c < j; c++) s.add(w[c]);
+                                        /* to test add(char ch) */
+                                        for (int c = 0; c < j; c++) s.add(w[c]);
 
-                                    /* or, to test add(char[] w, int j) */
-                                    /* s.add(w, j); */
+                                        /* or, to test add(char[] w, int j) */
+                                        /* s.add(w, j); */
 
-                                    s.stem();
-                                    {  String u;
+                                        s.stem();
+                                        {  String u;
 
-                                        /* and now, to test toString() : */
-                                        u = s.toString();
+                                            /* and now, to test toString() : */
+                                            u = s.toString();
 
-                                        /* to test getResultBuffer(), getResultLength() : */
-                                        /* u = new String(s.getResultBuffer(), 0, s.getResultLength()); */
-                                        System.out.print(u);
+                                            /* to test getResultBuffer(), getResultLength() : */
+                                            /* u = new String(s.getResultBuffer(), 0, s.getResultLength()); */
+                                            System.out.print(u);
+                                        }
+                                        break;
                                     }
-                                    break;
                                 }
                             }
+                            if (ch < 0) break;  // not a character
+                            System.out.print((char)ch);
                         }
-                        if (ch < 0) break;
-                        System.out.print((char)ch);
-                    }
                     }
                     catch (IOException e) {
-                        System.out.println("error reading " + args[i]);
-                        break;
+                        // System.out.println("error reading " + args[i]);
+                        // break;
                     }
                 }
                 catch (FileNotFoundException e) {
-                    System.out.println("file " + args[i] + " not found");
-                    break;
+                    // System.out.println("file " + args[i] + " not found");
+                    // break;
                 }
         }
     }
