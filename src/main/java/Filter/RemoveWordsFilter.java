@@ -20,10 +20,6 @@ public class RemoveWordsFilter implements Filter {
         return null;
     }
 
-    @Override
-    public List<String> filter(String filePath) {
-        return null;
-    }
 
     public static void main(String args[])
     {

@@ -6,6 +6,6 @@ public interface Filter {
 
     public List<String> filter(List<String> text);
 
-    public List<String> filter(String filePath);
+    // public List<String> filter(String filePath);
 
 }

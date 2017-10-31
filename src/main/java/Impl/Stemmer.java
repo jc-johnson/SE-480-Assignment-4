@@ -1,50 +1,50 @@
 package main.java.Impl;
 
+import main.java.Interfaces.Filter;
 import main.java.Utils.Constants;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by JJOHN on 10/28/2017.
+ *
+ * Porter stemmer in Java. The original paper is in
+
+ Porter, 1980, An algorithm for suffix stripping, Program, Vol. 14,
+ no. 3, pp 130-137,
+
+ See also http://www.tartarus.org/~martin/PorterStemmer
+
+ History:
+
+ Release 1
+
+ Bug 1 (reported by Gonzalo Parra 16/10/99) fixed as marked below.
+ The words 'aed', 'eed', 'oed' leave k at 'a' for step 3, and b[k-1]
+ is then out outside the bounds of b.
+
+ Release 2
+
+ Similarly,
+
+ Bug 2 (reported by Steve Dyrdahl 22/2/00) fixed as marked below.
+ 'ion' by itself leaves j = -1 in the test for 'ion' in step 5, and
+ b[j] is then outside the bounds of b.
+
+ Release 3
+
+ Considerably revised 4/9/00 in the light of many helpful suggestions
+ from Brian Goetz of Quiotix Corporation (brian@quiotix.com).
+
+ Release 4
+ *
  */
-public class PorterStemmerImpl {
-
-    /*
-
-   Porter stemmer in Java. The original paper is in
-
-       Porter, 1980, An algorithm for suffix stripping, Program, Vol. 14,
-       no. 3, pp 130-137,
-
-   See also http://www.tartarus.org/~martin/PorterStemmer
-
-   History:
-
-   Release 1
-
-   Bug 1 (reported by Gonzalo Parra 16/10/99) fixed as marked below.
-   The words 'aed', 'eed', 'oed' leave k at 'a' for step 3, and b[k-1]
-   is then out outside the bounds of b.
-
-   Release 2
-
-   Similarly,
-
-   Bug 2 (reported by Steve Dyrdahl 22/2/00) fixed as marked below.
-   'ion' by itself leaves j = -1 in the test for 'ion' in step 5, and
-   b[j] is then outside the bounds of b.
-
-   Release 3
-
-   Considerably revised 4/9/00 in the light of many helpful suggestions
-   from Brian Goetz of Quiotix Corporation (brian@quiotix.com).
-
-   Release 4
-
-*/
+public class Stemmer implements Filter{
 
     /**
      * Stemmer, implementing the Porter Stemming Algorithm
@@ -53,8 +53,6 @@ public class PorterStemmerImpl {
      * word can be provided a character at time (by calling add()), or at once
      * by calling one of the various stem(something) methods.
      */
-
-    static class Stemmer   {
         private char[] b;
         private int i,      /* offset into b */
                 i_end,      /* offset to end of stemmed word */
@@ -358,6 +356,51 @@ public class PorterStemmerImpl {
             i_end = k+1; i = 0;
         }
 
+        public List<String> filter(List<String> text) {
+            List<String> newText = new ArrayList<String>();
+            char[] characterBuffer = new char[501];
+            Stemmer stemmer = new Stemmer();
+
+            for(String string : text) {
+                for (int l = 0; l < string.length() ; l++) {
+                    Character character = string.charAt(l);
+                    if (Character.isLetter(character)) {
+                        int i = 0;
+                        while(true) {
+                            character = Character.toLowerCase(character);
+                            characterBuffer[i] = character;
+                            if (i < 500) i++;
+
+                            if (j < 500) j++;
+                            if (!Character.isLetter(character)) {
+
+                                /* to test add(char ch) */
+                                for (int c = 0; c < j; c++) stemmer.add(characterBuffer[c]);
+
+                                /* or, to test add(char[] w, int j) */
+                                /* s.add(w, j); */
+                                stemmer.stem();
+                                {  String u;
+
+                                    /* and now, to test toString() : */
+                                    u = stemmer.toString();
+
+                                    /* to test getResultBuffer(), getResultLength() : */
+                                    /* u = new String(s.getResultBuffer(), 0, s.getResultLength()); */
+                                    System.out.print(u);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    // not a character
+                    if (character < 0) break;
+                    System.out.print(character);
+                }
+            }
+            return null;
+        }
+
         /** Test program for demonstrating the Stemmer.  It reads text from a
          * a list of files, stems each word, and writes the result to standard
          * output. Note that the word stemmed is expected to be in lower case:
@@ -374,10 +417,12 @@ public class PorterStemmerImpl {
 
                     try {
                         while(true) {
+                            // start reading in characters
                             int ch = in.read();
                             if (Character.isLetter((char) ch)) {
                                 int j = 0;
                                 while(true) {
+                                    // keep reading in characters
                                     ch = Character.toLowerCase((char) ch);
                                     w[j] = (char) ch;
                                     if (j < 500) j++;
@@ -418,5 +463,4 @@ public class PorterStemmerImpl {
                     // break;
                 }
         }
-    }
 }

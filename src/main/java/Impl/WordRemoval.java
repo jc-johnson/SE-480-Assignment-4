@@ -1,6 +1,6 @@
 package main.java.Impl;
 
-import main.java.Interfaces.WordRemoval;
+import main.java.Interfaces.Filter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,31 +8,17 @@ import java.util.List;
 /**
  * Created by JJOHN on 10/28/2017.
  */
-public class WordRemovalImpl implements WordRemoval {
+public class WordRemoval implements Filter{
 
     List<String> words;
     List<String> finalText = new ArrayList<>();
 
-    public WordRemovalImpl() {
+    public WordRemoval() {
 
     }
 
-    public WordRemovalImpl(List<String> words) {
+    public WordRemoval(List<String> words) {
         this.words = words;
-    }
-
-    @Override
-    public List<String> removeWords(List<String> text, List<String> words) {
-
-        List<String> localText = text;
-
-        for(String string : localText) {
-            for(String word : words) {
-                removeWords(word, string);
-            }
-        }
-
-        return localText;
     }
 
     public String removeWords(String string, String removeWord) {
@@ -56,11 +42,32 @@ public class WordRemovalImpl implements WordRemoval {
         }
 
         // System.out.println(removeWords(sentence, "the"));
-        WordRemovalImpl wordRemoval = new WordRemovalImpl();
+        WordRemoval wordRemoval = new WordRemoval();
 
         for(String string : wordList) {
             String newSentence = wordRemoval.removeWords(sentence, string);
             System.out.println("New sentence: " + newSentence);
         }
+    }
+
+    @Override
+    public List<String> filter(List<String> text) {
+
+        if (text != null) {
+            List<String> finalText = new ArrayList<>();
+            String tempString;
+
+
+            for (String string : text) {
+                for(String word : words) {
+                    tempString = removeWords(word, string);
+                    finalText.add(tempString);
+                }
+            }
+
+            return finalText;
+        }
+
+        return null;
     }
 }
