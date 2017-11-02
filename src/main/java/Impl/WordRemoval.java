@@ -70,4 +70,9 @@ public class WordRemoval implements Filter{
 
         return null;
     }
+
+    @Override
+    public List<String> filter(String filePath) {
+        return null;
+    }
 }

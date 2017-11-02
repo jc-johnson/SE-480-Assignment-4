@@ -401,6 +401,67 @@ public class Stemmer implements Filter{
             return null;
         }
 
+        public List<String> filter(String filePath) {
+            char[] w = new char[501];
+            Stemmer s = new Stemmer();
+            List<String> output = new ArrayList<>();
+
+            try {
+                // FileInputStream in = new FileInputStream(args[i]);
+                FileInputStream in = new FileInputStream(filePath);
+
+                try {
+                    while(true) {
+                        // start reading in characters
+                        int ch = in.read();
+                        if (Character.isLetter((char) ch)) {
+                            int j = 0;
+                            while(true) {
+
+                                // keep reading in characters
+                                ch = Character.toLowerCase((char) ch);
+                                w[j] = (char) ch;
+                                if (j < 500) j++;
+                                ch = in.read();
+                                if (!Character.isLetter((char) ch)) {
+
+                                    // to test add(char ch)
+                                    for (int c = 0; c < j; c++) s.add(w[c]);
+
+                                    // or, to test add(char[] w, int j)
+                                    /* s.add(w, j); */
+
+                                    s.stem();
+                                    {  String u;
+
+                                        /* and now, to test toString() : */
+                                        u = s.toString();
+
+                                        /* to test getResultBuffer(), getResultLength() : */
+                                        /* u = new String(s.getResultBuffer(), 0, s.getResultLength()); */
+                                        System.out.print(u);
+                                        // save output
+                                        output.add(u);
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                        if (ch < 0) break;  // not a character
+                        char character = (char) ch;
+                        System.out.print(character);
+                        // output.add((String)character);
+                    }
+                } catch (IOException e) {
+                    System.out.println("error reading " + filePath);
+                }
+            } catch (FileNotFoundException e) {
+                System.out.println("file " + filePath + " not found");
+            }
+
+            return output;
+        }
+
         /** Test program for demonstrating the Stemmer.  It reads text from a
          * a list of files, stems each word, and writes the result to standard
          * output. Note that the word stemmed is expected to be in lower case:

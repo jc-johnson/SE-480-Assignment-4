@@ -12,14 +12,14 @@ import java.util.List;
 
 public class Reader {
 
-    public List<String> buildStopWords() {
+    public List<String> buildStopWords(String filePath) {
 
         try {
 
             List<String> stopWords = new ArrayList<>();
 
             // Read in file
-            FileInputStream fileInputStream = new FileInputStream(Constants.STOP_WORDS_FILE);
+            FileInputStream fileInputStream = new FileInputStream(filePath);
             DataInputStream dataInputStream = new DataInputStream(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(dataInputStream));
             String strLine;

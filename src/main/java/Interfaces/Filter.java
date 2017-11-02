@@ -2,10 +2,13 @@ package main.java.Interfaces;
 
 import java.util.List;
 
+/**
+ * Performs filtering operations on variety of different inputs
+ */
 public interface Filter {
 
-    public List<String> filter(List<String> text);
+    List<String> filter(List<String> text);
 
-    // public List<String> filter(String filePath);
+    List<String> filter(String filePath);
 
 }
