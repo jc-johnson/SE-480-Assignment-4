@@ -2,6 +2,7 @@ package main.java.Impl;
 
 import main.java.Interfaces.Filter;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,6 +74,36 @@ public class WordRemoval implements Filter{
 
     @Override
     public List<String> filter(String filePath) {
-        return null;
+        List<String> output = new ArrayList<>();
+
+        if (filePath != "") {
+            try {
+                // Open the file
+                FileInputStream fstream = null;
+                fstream = new FileInputStream(filePath);
+                BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+
+                String strLine;
+
+                //Read File Line By Line
+                while ((strLine = br.readLine()) != null)   {
+                    // Print the content on the console
+                    System.out.println (strLine);
+                    // Add content to file
+                    output.add(strLine);
+                }
+
+                //Close the input stream
+                br.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        return output;
+
     }
 }
