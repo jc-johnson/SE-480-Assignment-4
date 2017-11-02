@@ -13,11 +13,11 @@ import java.util.List;
  */
 public class FileWriter {
 
-    public File write(List<String> text) {
+    public File write(List<String> text, String filePath) {
 
         PrintWriter writer = null;
         try {
-            writer = new PrintWriter(Constants.OUTPUT_FILE, "UTF-8");
+            writer = new PrintWriter(filePath, "UTF-8");
             for (String string : text) {
                 System.out.println("Writing string to file");
                 writer.println(string);
@@ -28,6 +28,6 @@ public class FileWriter {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        return new File(Constants.OUTPUT_FILE);
+        return new File(filePath);
     }
 }

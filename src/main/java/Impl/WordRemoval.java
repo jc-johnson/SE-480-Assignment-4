@@ -89,7 +89,7 @@ public class WordRemoval implements Filter{
                 while ((strLine = br.readLine()) != null)   {
                     // Print the content on the console
                     System.out.println (strLine);
-                    // Add content to file
+                    // Add content to List
                     output.add(strLine);
                 }
 
