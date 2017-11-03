@@ -24,15 +24,18 @@ public class Reader {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(dataInputStream));
             String strLine;
 
-            //Read File Line By Line
+            //Read each stop word and save it to list
             while ((strLine = bufferedReader.readLine()) != null)   {
+                System.out.println ("Adding stop word to list...");
                 stopWords.add(strLine);
-                // System.out.println (strLine);
             }
 
+            // Print each saved stop word
+            /*
             for(String string : stopWords) {
                 System.out.println(string);
             }
+            */
 
             //Close the input stream
             dataInputStream.close();

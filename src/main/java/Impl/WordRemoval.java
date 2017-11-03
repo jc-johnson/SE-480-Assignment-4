@@ -22,15 +22,79 @@ public class WordRemoval implements Filter{
         this.words = words;
     }
 
-    public String removeWords(String string, String removeWord) {
+    public String removeWords(String wordToRemove, String string) {
 
         String finalWord = string.toLowerCase();
-        finalWord = finalWord.replaceAll(removeWord, "");
+        String regex = "^" + wordToRemove + "$";
+        finalWord = finalWord.replaceAll(regex, "");
         this.finalText.add(finalWord);
-        System.out.println("REMOVING: " + removeWord + " FROM: " + string);
+        System.out.println("REMOVING: " + wordToRemove + " FROM: " + string);
+        System.out.println("Final text: " + finalWord);
         return finalWord;
 
+    }
 
+    @Override
+    public List<String> filter(List<String> text) {
+
+        if (text != null) {
+            List<String> finalText = new ArrayList<>();
+            String tempString = "";
+
+
+            for (String string : text) {
+                for(String word : words) {
+                    tempString = removeWords(word, string);
+                }
+                finalText.add(tempString); // add string to final text after removing all unecessary words
+            }
+
+            return finalText;
+        }
+
+        return null;
+    }
+
+    /**
+     * Removes all stop words present in a given file
+     * @param filePath
+     * @return
+     */
+    @Override
+    public List<String> filter(String filePath) {
+
+        List<String> output = new ArrayList<>();
+
+        if (filePath != "") {
+            try {
+                // Open the file
+                FileInputStream fstream = null;
+                fstream = new FileInputStream(filePath);
+                BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+
+                String strLine;
+                List<String> preFilteredText = new ArrayList<>();
+
+                //Read File Line By Line and add it to list
+                while ((strLine = br.readLine()) != null)   {
+                    System.out.println ("Adding line to list...");
+                    preFilteredText.add(strLine);
+                }
+
+                // Filters stopwords out of text
+                output = this.filter(preFilteredText);
+
+                //Close the input stream
+                br.close();
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return output;
     }
 
     public static void main(String[] args) {
@@ -49,61 +113,5 @@ public class WordRemoval implements Filter{
             String newSentence = wordRemoval.removeWords(sentence, string);
             System.out.println("New sentence: " + newSentence);
         }
-    }
-
-    @Override
-    public List<String> filter(List<String> text) {
-
-        if (text != null) {
-            List<String> finalText = new ArrayList<>();
-            String tempString;
-
-
-            for (String string : text) {
-                for(String word : words) {
-                    tempString = removeWords(word, string);
-                    finalText.add(tempString);
-                }
-            }
-
-            return finalText;
-        }
-
-        return null;
-    }
-
-    @Override
-    public List<String> filter(String filePath) {
-        List<String> output = new ArrayList<>();
-
-        if (filePath != "") {
-            try {
-                // Open the file
-                FileInputStream fstream = null;
-                fstream = new FileInputStream(filePath);
-                BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-
-                String strLine;
-
-                //Read File Line By Line
-                while ((strLine = br.readLine()) != null)   {
-                    // Print the content on the console
-                    System.out.println (strLine);
-                    // Add content to List
-                    output.add(strLine);
-                }
-
-                //Close the input stream
-                br.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        return output;
-
     }
 }
