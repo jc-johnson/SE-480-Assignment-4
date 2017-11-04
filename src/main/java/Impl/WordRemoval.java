@@ -24,9 +24,22 @@ public class WordRemoval implements Filter{
 
     public String removeWords(String wordToRemove, String string) {
 
+        // create regex for single character words
+        if (wordToRemove.length() == 1) {
+            String finalWord = string.toLowerCase();
+            String regex = "\\b[" + wordToRemove + "]\\b";
+            finalWord = finalWord.replaceAll(regex, "");
+            // finalWord = finalWord.replaceAll(wordToRemove, "");
+            this.finalText.add(finalWord);
+            System.out.println("REMOVING: " + wordToRemove + " FROM: " + string);
+            System.out.println("Final text: " + finalWord);
+            return finalWord;
+        }
+
         String finalWord = string.toLowerCase();
-        String regex = "^" + wordToRemove + "$";
+        String regex = " " + wordToRemove + " ";
         finalWord = finalWord.replaceAll(regex, "");
+        // finalWord = finalWord.replaceAll(wordToRemove, "");
         this.finalText.add(finalWord);
         System.out.println("REMOVING: " + wordToRemove + " FROM: " + string);
         System.out.println("Final text: " + finalWord);
@@ -98,8 +111,8 @@ public class WordRemoval implements Filter{
     }
 
     public static void main(String[] args) {
-        String[] words = {"the", "and", "or"};
-        String sentence = "The cat jumped over the hat and the dog or the moose";
+        String[] words = {"a", "the", "and", "or"};
+        String sentence = "The cat jumped over the hat and the dog or the moose a";
         List<String> wordList = new ArrayList<String>();
 
         for(String string : words) {
@@ -110,7 +123,7 @@ public class WordRemoval implements Filter{
         WordRemoval wordRemoval = new WordRemoval();
 
         for(String string : wordList) {
-            String newSentence = wordRemoval.removeWords(sentence, string);
+            String newSentence = wordRemoval.removeWords(string, sentence);
             System.out.println("New sentence: " + newSentence);
         }
     }
