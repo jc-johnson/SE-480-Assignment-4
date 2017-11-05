@@ -1,9 +1,11 @@
 package main.java.Impl;
 
 import main.java.Interfaces.Filter;
+import main.java.Utils.Constants;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,8 +33,8 @@ public class WordRemoval implements Filter{
             finalWord = finalWord.replaceAll(regex, "");
             // finalWord = finalWord.replaceAll(wordToRemove, "");
             this.finalText.add(finalWord);
-            System.out.println("REMOVING: " + wordToRemove + " FROM: " + string);
-            System.out.println("Final text: " + finalWord);
+            // System.out.println("REMOVING: " + wordToRemove + " FROM: " + string);
+            // System.out.println("Final text: " + finalWord);
             return finalWord;
         }
 
@@ -41,10 +43,33 @@ public class WordRemoval implements Filter{
         finalWord = finalWord.replaceAll(regex, "");
         // finalWord = finalWord.replaceAll(wordToRemove, "");
         this.finalText.add(finalWord);
-        System.out.println("REMOVING: " + wordToRemove + " FROM: " + string);
-        System.out.println("Final text: " + finalWord);
+        // System.out.println("REMOVING: " + wordToRemove + " FROM: " + string);
+        // System.out.println("Final text: " + finalWord);
         return finalWord;
 
+    }
+
+    public List<String> altFilter(List<String> text) {
+
+
+        String currentLine = "";
+
+        if (text != null) {
+            List<String> finalText = new ArrayList<>();
+
+            for (String string : text) {
+                String tempString = string;
+
+                // Go through each word in string and replace if needed
+                for(String word : words) {
+                    currentLine = removeWords(string, word);
+
+
+                }
+            }
+            return finalText;
+        }
+        return null;
     }
 
     @Override
@@ -53,18 +78,17 @@ public class WordRemoval implements Filter{
         if (text != null) {
             List<String> finalText = new ArrayList<>();
             String tempString = "";
-
+            String newTempString = "";
 
             for (String string : text) {
                 for(String word : words) {
-                    tempString = removeWords(word, string);
+                    tempString = removeWords(word, string);     // gives you different string each time
+
                 }
                 finalText.add(tempString); // add string to final text after removing all unecessary words
             }
-
             return finalText;
         }
-
         return null;
     }
 
@@ -95,7 +119,7 @@ public class WordRemoval implements Filter{
                 }
 
                 // Filters stopwords out of text
-                output = this.filter(preFilteredText);
+                output = this.altFilter(preFilteredText);
 
                 //Close the input stream
                 br.close();
@@ -108,6 +132,42 @@ public class WordRemoval implements Filter{
 
         }
         return output;
+    }
+
+    public void filterFile (String filePath) {
+        try
+        {
+            File file = new File(filePath);
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line = "";
+            String oldtext = "";
+
+            // Copy file to string
+            while((line = reader.readLine()) != null)
+            {
+                oldtext += line.toLowerCase() + "\r\n";   // create new line
+            }
+            reader.close();
+
+            String word = words.get(0);
+            String regex = "[^a-zA-Z0-9]" + word + "[^a-zA-Z0-9]";
+            String replacedText  = oldtext.replaceAll(regex, " ");
+
+            for (int i = 1; i < words.size(); i++) {
+                regex = "[^a-zA-Z0-9]" + words.get(i) + "[^a-zA-Z0-9]" ;
+                replacedText = replacedText.replaceAll(regex, " ");
+            }
+
+            // Overwrite old file
+            FileWriter writer = new FileWriter(Constants.WORD_REMOVAL_OUTPUT_FILE);
+            writer.write(replacedText);
+            writer.close();
+
+        }
+        catch (IOException ioe)
+        {
+            ioe.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

@@ -20,22 +20,15 @@ public class Application {
 
         // Remove stopwords
         WordRemoval wordRemoval = new WordRemoval(stopWords); // TODO: change to word remover
-        List<String> text = wordRemoval.filter(filePath);
-
-        // Save wordRemoval output as a file to use for stemmer
-        FileWriter fileWriter = new FileWriter();
-        fileWriter.write(text, filePath);
+        wordRemoval.filterFile(filePath);
 
         // apply stemming words
         Stemmer stemmer = new Stemmer();
-        stemmer.filter(filePath);
+        stemmer.filter(Constants.WORD_REMOVAL_OUTPUT_FILE);
 
         // data sink
         DataSink dataSink = new DataSink();
         dataSink.run(filePath);
         dataSink.printTopWordCount(10);
     }
-
-
-
 }
