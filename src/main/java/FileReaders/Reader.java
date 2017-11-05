@@ -25,8 +25,8 @@ public class Reader {
             String strLine;
 
             //Read each stop word and save it to list
+            System.out.println ("Adding stop word to list...");
             while ((strLine = bufferedReader.readLine()) != null)   {
-                System.out.println ("Adding stop word to list...");
                 stopWords.add(strLine);
             }
 

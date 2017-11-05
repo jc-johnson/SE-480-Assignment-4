@@ -59,12 +59,12 @@ public class DataSink {
             });
 
             //Printing the repeated words in input file along with their occurrences
-            System.out.println("Repeated Words In Input File Are :");
+            // System.out.println("Repeated Words In Input File Are :");
 
             // Keep track of
             for (Map.Entry<String, Integer> entry : list) {
                 if (entry.getValue() > 1) {
-                    System.out.println(entry.getKey() + " : "+ entry.getValue());
+                    // System.out.println(entry.getKey() + " : "+ entry.getValue());
                     topWordCount.add(entry);
                 }
             }
@@ -89,8 +89,9 @@ public class DataSink {
      * @param count
      */
     public void printTopWordCount(int count) {
+        System.out.println("Top " + count + " words in file:");
         for (int i = 0; i < count; i++) {
-            System.out.println(topWordCount.get(i).getKey() + topWordCount.get(i).getValue());
+            System.out.println(topWordCount.get(i).getKey() + " " + topWordCount.get(i).getValue());
         }
     }
 
