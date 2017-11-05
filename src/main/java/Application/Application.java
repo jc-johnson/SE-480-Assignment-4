@@ -28,7 +28,7 @@ public class Application {
 
         // data sink
         DataSink dataSink = new DataSink();
-        dataSink.run(filePath);
+        dataSink.run(Constants.STEMMER_OUTPUT_FILE);
         dataSink.printTopWordCount(10);
     }
 }

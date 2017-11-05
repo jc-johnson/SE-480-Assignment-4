@@ -387,7 +387,7 @@ public class Stemmer implements Filter{
 
                                     /* to test getResultBuffer(), getResultLength() : */
                                     /* u = new String(s.getResultBuffer(), 0, s.getResultLength()); */
-                                    System.out.print(u);
+                                    // System.out.print(u);
                                 }
                                 break;
                             }
@@ -395,7 +395,7 @@ public class Stemmer implements Filter{
                     }
                     // not a character
                     if (character < 0) break;
-                    System.out.print(character);
+                    // System.out.print(character);
                 }
             }
             return null;
@@ -435,21 +435,22 @@ public class Stemmer implements Filter{
                                     {  String u;
 
                                         /* and now, to test toString() : */
-                                        u = s.toString();
+                                        u = s.toString()+"\r\n";
 
                                         /* to test getResultBuffer(), getResultLength() : */
                                         /* u = new String(s.getResultBuffer(), 0, s.getResultLength()); */
-                                        System.out.print(u);
+                                        // System.out.print(u);
                                         // save output
                                         output.add(u);
                                     }
+
                                     break;
                                 }
                             }
                         }
                         if (ch < 0) break;  // not a character
                         char character = (char) ch;
-                        System.out.print(character);
+                        // System.out.print(character);
                         // output.add((String)character);
                     }
                 } catch (IOException e) {
@@ -457,6 +458,18 @@ public class Stemmer implements Filter{
                 }
             } catch (FileNotFoundException e) {
                 System.out.println("file " + filePath + " not found");
+            } finally {
+                // Write output to file
+                FileWriter writer = null;
+                try {
+                    writer = new FileWriter(Constants.STEMMER_OUTPUT_FILE);
+                    for (String string : output) {
+                        writer.write(string);
+                    }
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             return output;
@@ -504,14 +517,14 @@ public class Stemmer implements Filter{
 
                                             /* to test getResultBuffer(), getResultLength() : */
                                             /* u = new String(s.getResultBuffer(), 0, s.getResultLength()); */
-                                            System.out.print(u);
+                                            // System.out.print(u);
                                         }
                                         break;
                                     }
                                 }
                             }
                             if (ch < 0) break;  // not a character
-                            System.out.print((char)ch);
+                            // System.out.print((char)ch);
                         }
                     }
                     catch (IOException e) {

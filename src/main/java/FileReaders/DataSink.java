@@ -80,6 +80,10 @@ public class DataSink {
         }
     }
 
+    public void checkStopWords(List<String> stopwords) {
+
+    }
+
     /**
      * Gets x top used words
      * @param count

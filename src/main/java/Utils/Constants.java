@@ -10,5 +10,5 @@ public class Constants {
     public static final String OUTPUT_FILE = "src/main/java/Resources/output.txt";
 
     public static final String WORD_REMOVAL_OUTPUT_FILE = "src/main/java/Resources/word_removal_output.txt";
-
+    public static final String STEMMER_OUTPUT_FILE = "src/main/java/Resources/stemmer_output.txt";
 }

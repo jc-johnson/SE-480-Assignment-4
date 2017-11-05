@@ -49,29 +49,6 @@ public class WordRemoval implements Filter{
 
     }
 
-    public List<String> altFilter(List<String> text) {
-
-
-        String currentLine = "";
-
-        if (text != null) {
-            List<String> finalText = new ArrayList<>();
-
-            for (String string : text) {
-                String tempString = string;
-
-                // Go through each word in string and replace if needed
-                for(String word : words) {
-                    currentLine = removeWords(string, word);
-
-
-                }
-            }
-            return finalText;
-        }
-        return null;
-    }
-
     @Override
     public List<String> filter(List<String> text) {
 
@@ -99,39 +76,7 @@ public class WordRemoval implements Filter{
      */
     @Override
     public List<String> filter(String filePath) {
-
-        List<String> output = new ArrayList<>();
-
-        if (filePath != "") {
-            try {
-                // Open the file
-                FileInputStream fstream = null;
-                fstream = new FileInputStream(filePath);
-                BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-
-                String strLine;
-                List<String> preFilteredText = new ArrayList<>();
-
-                //Read File Line By Line and add it to list
-                while ((strLine = br.readLine()) != null)   {
-                    System.out.println ("Adding line to list...");
-                    preFilteredText.add(strLine);
-                }
-
-                // Filters stopwords out of text
-                output = this.altFilter(preFilteredText);
-
-                //Close the input stream
-                br.close();
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-        return output;
+        return null;
     }
 
     public void filterFile (String filePath) {
