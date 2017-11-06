@@ -1,6 +1,8 @@
 package main.java.Impl;
 
 import main.java.Interfaces.Filter;
+import main.java.Modules.FileParser;
+import main.java.Modules.WordDeleter;
 import main.java.Utils.Constants;
 
 import java.io.*;
@@ -81,6 +83,7 @@ public class WordRemover implements Filter{
     public void filterFile (String filePath) {
         try
         {
+            /*
             File file = new File(filePath);
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line = "";
@@ -93,12 +96,23 @@ public class WordRemover implements Filter{
                 oldtext += line.toLowerCase() + "\r\n";   // create new line
             }
             reader.close();
+            */
 
+            // Modularizing above logic
+            FileParser fileParser = new FileParser();
+            String oldText = fileParser.parse(filePath);
+
+            // Passing old text string
+
+            // Modularizing following logic
+            WordDeleter wordDeleter = new WordDeleter();
+            wordDeleter.deleteWords(oldText, words);
+
+            /*
             String word = words.get(0);
             String regex = "[^a-zA-Z0-9]" + word + "[^a-zA-Z0-9]";
             String replacedText  = oldtext.replaceAll(regex, " ");
 
-            //TODO:  Seperate into module
             for (int i = 1; i < words.size(); i++) {
                 regex = "[^a-zA-Z0-9]" + words.get(i) + "[^a-zA-Z0-9]" ;
                 replacedText = replacedText.replaceAll(regex, " ");
@@ -108,12 +122,15 @@ public class WordRemover implements Filter{
             FileWriter writer = new FileWriter(Constants.WORD_REMOVAL_OUTPUT_FILE);
             writer.write(replacedText);
             writer.close();
+            */
+
+        } catch (Exception e) {
 
         }
-        catch (IOException ioe)
-        {
-            ioe.printStackTrace();
-        }
+        // catch (IOException ioe)
+        // {
+        //     ioe.printStackTrace();
+        // }
     }
 
     public static void main(String[] args) {
