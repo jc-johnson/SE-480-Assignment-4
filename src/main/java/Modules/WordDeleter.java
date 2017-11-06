@@ -8,7 +8,7 @@ import java.util.List;
 
 public class WordDeleter {
 
-    public void deleteWords(String text, List<String> wordsToDelete) {
+    public String deleteWords(String text, List<String> wordsToDelete) {
 
         List<String> words = wordsToDelete;
         String oldText = text;
@@ -32,6 +32,8 @@ public class WordDeleter {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return Constants.WORD_REMOVAL_OUTPUT_FILE;
 
     }
 }

@@ -4,6 +4,7 @@ import main.java.FileReaders.Reader;
 import main.java.FileReaders.DataSink;
 import main.java.Impl.BuildableImpl;
 import main.java.Impl.Stemmer;
+import main.java.Impl.WordFilterImpl;
 import main.java.Impl.WordRemover;
 import main.java.Interfaces.Buildable;
 import main.java.Utils.Constants;
@@ -22,9 +23,9 @@ public class Application {
         long totalStartTime = System.currentTimeMillis();
 
         // Remove stop-words
-        WordRemover wordRemover = new WordRemover(stopWords);
+        WordRemover wordRemover = new WordRemover(new WordFilterImpl(), stopWords);
         long wordRemoverStartTime = System.currentTimeMillis();
-        wordRemover.filterFile(filePath);
+        wordRemover.filter(filePath, stopWords);
         long wordRemoverEndTime = System.currentTimeMillis();
         long totalWordRemoverDuration = wordRemoverEndTime - wordRemoverStartTime;
 
