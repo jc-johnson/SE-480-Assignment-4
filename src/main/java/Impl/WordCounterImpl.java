@@ -53,6 +53,7 @@ public class WordCounterImpl implements WordCounter{
                 }
             });
 
+
             List<Map.Entry<String, Integer>> sortedList = new ArrayList<Map.Entry<String,Integer>>(list);
             Collections.sort(sortedList, new Comparator<Map.Entry<String, Integer>>() {
                 @Override
@@ -62,11 +63,12 @@ public class WordCounterImpl implements WordCounter{
                 }
             });
 
+
             //Printing the repeated words in input file along with their occurrences
             // System.out.println("Repeated Words In Input File Are :");
 
             // Keep track of
-            for (Map.Entry<String, Integer> entry : sortedList) {
+            for (Map.Entry<String, Integer> entry : list) {
                 if (entry.getValue() > 1) {
                     // System.out.println(entry.getKey() + " : "+ entry.getValue());
                     topWordCount.add(entry);

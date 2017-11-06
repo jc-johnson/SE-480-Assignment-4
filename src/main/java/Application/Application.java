@@ -29,14 +29,14 @@ public class Application {
         // Apply stemming algorithm
         Stemmer stemmer = new Stemmer(new StemmerFilterImpl());
         long stemmerFilterStartTime = System.currentTimeMillis();
-        String stemmerOutput = stemmer.filter(wordRemoverOutput);
+        String stemmerOutput = stemmer.filter(Constants.WORD_REMOVAL_OUTPUT_FILE);
         long stemmerFilterEndTime = System.currentTimeMillis();
         long totalStemmerFilterDuration = stemmerFilterEndTime - stemmerFilterStartTime;
 
         // Get most commonly used words
         DataSink dataSink = new DataSink(new WordCounterImpl());
         long dataSinkStartTime = System.currentTimeMillis();
-        dataSink.run(stemmerOutput, 10);
+        dataSink.run(Constants.STEMMER_OUTPUT_FILE, 10);
         long dataSinkEndTime = System.currentTimeMillis();
         long totalDataSinkDuration = dataSinkEndTime - dataSinkStartTime;
 

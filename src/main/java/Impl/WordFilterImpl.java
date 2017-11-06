@@ -3,7 +3,12 @@ package main.java.Impl;
 import main.java.Interfaces.WordFilter;
 import main.java.Modules.FileParser;
 import main.java.Modules.WordDeleter;
+import main.java.Utils.Constants;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.List;
 
 public class WordFilterImpl implements WordFilter {
@@ -14,7 +19,7 @@ public class WordFilterImpl implements WordFilter {
 
         try
         {
-            /*
+
             File file = new File(filePath);
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line = "";
@@ -26,9 +31,9 @@ public class WordFilterImpl implements WordFilter {
                 oldtext += line.toLowerCase() + "\r\n";   // create new line
             }
             reader.close();
-            */
 
 
+            /*
             // Modularizing above logic
             FileParser fileParser = new FileParser();
             String oldText = fileParser.parse(filePath);
@@ -38,8 +43,8 @@ public class WordFilterImpl implements WordFilter {
             // Modularizing following logic
             WordDeleter wordDeleter = new WordDeleter();
             return wordDeleter.deleteWords(oldText, words);
+            */
 
-            /*
             String word = words.get(0);
             String regex = "[^a-zA-Z0-9]" + word + "[^a-zA-Z0-9]";
             String replacedText  = oldtext.replaceAll(regex, " ");
@@ -53,7 +58,7 @@ public class WordFilterImpl implements WordFilter {
             FileWriter writer = new FileWriter(Constants.WORD_REMOVAL_OUTPUT_FILE);
             writer.write(replacedText);
             writer.close();
-            */
+
         }  catch (Exception e) {
 
         }
