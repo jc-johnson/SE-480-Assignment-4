@@ -86,6 +86,7 @@ public class WordRemover implements Filter{
             String line = "";
             String oldtext = "";
 
+            // TODO: Seperate into module
             // Copy file to string
             while((line = reader.readLine()) != null)
             {
@@ -97,6 +98,7 @@ public class WordRemover implements Filter{
             String regex = "[^a-zA-Z0-9]" + word + "[^a-zA-Z0-9]";
             String replacedText  = oldtext.replaceAll(regex, " ");
 
+            //TODO:  Seperate into module
             for (int i = 1; i < words.size(); i++) {
                 regex = "[^a-zA-Z0-9]" + words.get(i) + "[^a-zA-Z0-9]" ;
                 replacedText = replacedText.replaceAll(regex, " ");
