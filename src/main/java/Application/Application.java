@@ -19,17 +19,23 @@ public class Application {
         Buildable buildable = new Reader(new BuildableImpl());
         List<String> stopWords = buildable.buildStopWords(Constants.STOP_WORDS_FILE);
 
+        long startTime = System.currentTimeMillis();
+
         // Remove stop-words
         WordRemover wordRemover = new WordRemover(stopWords);
         wordRemover.filterFile(filePath);
 
-        // apply stemming words
+        // Apply stemming algorithm
         Stemmer stemmer = new Stemmer();
         stemmer.filter(Constants.WORD_REMOVAL_OUTPUT_FILE);
 
-        // data sink
+        // Get most commonly used words
         DataSink dataSink = new DataSink();
         dataSink.run(Constants.STEMMER_OUTPUT_FILE);
         dataSink.printTopWordCount(10);
+
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+        System.out.println("Duration: " + duration);
     }
 }
