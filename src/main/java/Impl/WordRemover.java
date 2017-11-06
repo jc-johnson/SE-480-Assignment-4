@@ -5,22 +5,21 @@ import main.java.Utils.Constants;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by JJOHN on 10/28/2017.
  */
-public class WordRemoval implements Filter{
+public class WordRemover implements Filter{
 
     List<String> words;
     List<String> finalText = new ArrayList<>();
 
-    public WordRemoval() {
+    public WordRemover() {
 
     }
 
-    public WordRemoval(List<String> words) {
+    public WordRemover(List<String> words) {
         this.words = words;
     }
 
@@ -125,10 +124,10 @@ public class WordRemoval implements Filter{
         }
 
         // System.out.println(removeWords(sentence, "the"));
-        WordRemoval wordRemoval = new WordRemoval();
+        WordRemover wordRemover = new WordRemover();
 
         for(String string : wordList) {
-            String newSentence = wordRemoval.removeWords(string, sentence);
+            String newSentence = wordRemover.removeWords(string, sentence);
             System.out.println("New sentence: " + newSentence);
         }
     }

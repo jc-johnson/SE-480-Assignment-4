@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 /**
  * Created by JJOHN on 10/28/2017.
  */
-public class WordRemovalImplTest {
+public class WordRemoverImplTest {
 
     String[] words = {"the", "and", "or"};
     String sentence = "The cat jumped over the hat and the dog or the moose";
