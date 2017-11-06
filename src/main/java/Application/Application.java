@@ -2,10 +2,7 @@ package main.java.Application;
 
 import main.java.FileReaders.Reader;
 import main.java.FileReaders.DataSink;
-import main.java.Impl.BuildableImpl;
-import main.java.Impl.Stemmer;
-import main.java.Impl.WordFilterImpl;
-import main.java.Impl.WordRemover;
+import main.java.Impl.*;
 import main.java.Interfaces.Buildable;
 import main.java.Utils.Constants;
 
@@ -30,7 +27,7 @@ public class Application {
         long totalWordRemoverDuration = wordRemoverEndTime - wordRemoverStartTime;
 
         // Apply stemming algorithm
-        Stemmer stemmer = new Stemmer();
+        Stemmer stemmer = new Stemmer(new StemmerFilterImpl());
         long stemmerFilterStartTime = System.currentTimeMillis();
         stemmer.filter(Constants.WORD_REMOVAL_OUTPUT_FILE);
         long stemmerFilterEndTime = System.currentTimeMillis();

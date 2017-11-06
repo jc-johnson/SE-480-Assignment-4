@@ -1,6 +1,7 @@
 package main.java.Impl;
 
 import main.java.Interfaces.Filter;
+import main.java.Interfaces.StemmerFilter;
 import main.java.Utils.Constants;
 
 import java.io.FileInputStream;
@@ -44,7 +45,9 @@ import java.util.List;
  Release 4
  *
  */
-public class Stemmer implements Filter{
+public class Stemmer implements StemmerFilter{
+
+    StemmerFilter stemmerFilter;
 
     /**
      * Stemmer, implementing the Porter Stemming Algorithm
@@ -59,7 +62,10 @@ public class Stemmer implements Filter{
                 j, k;
         private static final int INC = 50;
         /* unit of size whereby b is increased */
-        public Stemmer() {
+        public Stemmer(StemmerFilter stemmerFilter) {
+
+            this.stemmerFilter = stemmerFilter;
+
             b = new char[INC];
             i = 0;
             i_end = 0;
@@ -356,123 +362,9 @@ public class Stemmer implements Filter{
             i_end = k+1; i = 0;
         }
 
-        public List<String> filter(List<String> text) {
-            List<String> newText = new ArrayList<String>();
-            char[] characterBuffer = new char[501];
-            Stemmer stemmer = new Stemmer();
-
-            for(String string : text) {
-                for (int l = 0; l < string.length() ; l++) {
-                    Character character = string.charAt(l);
-                    if (Character.isLetter(character)) {
-                        int i = 0;
-                        while(true) {
-                            character = Character.toLowerCase(character);
-                            characterBuffer[i] = character;
-                            if (i < 500) i++;
-
-                            if (j < 500) j++;
-                            if (!Character.isLetter(character)) {
-
-                                /* to test add(char ch) */
-                                for (int c = 0; c < j; c++) stemmer.add(characterBuffer[c]);
-
-                                /* or, to test add(char[] w, int j) */
-                                /* s.add(w, j); */
-                                stemmer.stem();
-                                {  String u;
-
-                                    /* and now, to test toString() : */
-                                    u = stemmer.toString();
-
-                                    /* to test getResultBuffer(), getResultLength() : */
-                                    /* u = new String(s.getResultBuffer(), 0, s.getResultLength()); */
-                                    // System.out.print(u);
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    // not a character
-                    if (character < 0) break;
-                    // System.out.print(character);
-                }
-            }
-            return null;
-        }
-
-        public List<String> filter(String filePath) {
-            char[] w = new char[501];
-            Stemmer s = new Stemmer();
-            List<String> output = new ArrayList<>();
-
-            try {
-                // FileInputStream in = new FileInputStream(args[i]);
-                FileInputStream in = new FileInputStream(filePath);
-
-                try {
-                    while(true) {
-                        // start reading in characters
-                        int ch = in.read();
-                        if (Character.isLetter((char) ch)) {
-                            int j = 0;
-                            while(true) {
-
-                                // keep reading in characters
-                                ch = Character.toLowerCase((char) ch);
-                                w[j] = (char) ch;
-                                if (j < 500) j++;
-                                ch = in.read();
-                                if (!Character.isLetter((char) ch)) {
-
-                                    // to test add(char ch)
-                                    for (int c = 0; c < j; c++) s.add(w[c]);
-
-                                    // or, to test add(char[] w, int j)
-                                    /* s.add(w, j); */
-
-                                    s.stem();
-                                    {  String u;
-
-                                        /* and now, to test toString() : */
-                                        u = s.toString()+"\r\n";
-
-                                        /* to test getResultBuffer(), getResultLength() : */
-                                        /* u = new String(s.getResultBuffer(), 0, s.getResultLength()); */
-                                        // System.out.print(u);
-                                        // save output
-                                        output.add(u);
-                                    }
-
-                                    break;
-                                }
-                            }
-                        }
-                        if (ch < 0) break;  // not a character
-                        char character = (char) ch;
-                        // System.out.print(character);
-                        // output.add((String)character);
-                    }
-                } catch (IOException e) {
-                    System.out.println("error reading " + filePath);
-                }
-            } catch (FileNotFoundException e) {
-                System.out.println("file " + filePath + " not found");
-            } finally {
-                // Write output to file
-                FileWriter writer = null;
-                try {
-                    writer = new FileWriter(Constants.STEMMER_OUTPUT_FILE);
-                    for (String string : output) {
-                        writer.write(string);
-                    }
-                    writer.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return output;
+        @Override
+        public String filter(String filePath) {
+            return stemmerFilter.filter(filePath);
         }
 
         /** Test program for demonstrating the Stemmer.  It reads text from a
@@ -483,7 +375,7 @@ public class Stemmer implements Filter{
          */
         public static void main(String[] args) {
             char[] w = new char[501];
-            Stemmer s = new Stemmer();
+            Stemmer s = new Stemmer(new StemmerFilterImpl());
             // for (int i = 0; i < args.length; i++)
                 try {
                     // FileInputStream in = new FileInputStream(args[i]);
